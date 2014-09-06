@@ -1,0 +1,97 @@
+
+<!-- <h1>Magnet Board</h1> -->
+<div id="clickme">Click me!</div>
+<form action="/" method="POST">
+<fieldset>
+<legend>Add a picture to the magnet board!</legend>
+
+  URL:
+  <input type="text" name="url"><br>
+  <input type="submit"><br>
+
+</fieldset>
+</form>
+
+<br>
+
+<% @magnets.each do |magnet|%>
+  <%if magnet.size_status == true%>
+
+    <img data-magnet-id="<%= magnet.id%>" class="shrunk magnet" data-size="<%= magnet.size_status %>" src="<%= magnet.url %>" style="left: <%= magnet.x %>px; top: <%= magnet.y %>px">
+
+  <%else%> 
+
+    <img data-magnet-id="<%= magnet.id%>" data-size="<%= magnet.size_status %> " class="magnet" src="<%= magnet.url %>" style="left: <%= magnet.x %>px; top: <%= magnet.y %>px">
+  <%end%>
+
+<%end%>
+
+<hr class="verticalLine" width="1" size="500">
+
+<script>
+
+  //var element = document.getElementById('clickme');
+
+
+
+  var magnets = $(".magnet");
+  var length = magnets.length;
+  console.log('running js')
+
+  magnets.each(function(i,element) {
+
+    var id = $(element).data('magnet-id');
+
+    element.addEventListener('contextmenu', function(event) {
+      console.log(event);
+      event.preventDefault();
+      console.log(event);
+      $.get('/remove/' + id);
+      element.remove();
+    }, false);
+
+
+
+    whenElementDropped(element, function(x,y, mouseX, mouseY) {
+      console.log("x, y", x,y, mouseX, mouseY);
+      $.post('/magnets/' + id, {x: x, y: y});
+      SideBar(element, x, id, mouseX);
+
+    });
+
+
+  });
+
+function SideBar(element, x, id, mouseX){
+
+  var size_status = $(element).data('size')
+  if (size_status == false && mouseX < 175){
+    console.log('get smaller!');
+    $(element).data('size', true);
+    
+    $.post('/magnets/' + id, {size_status: true});
+
+    element.style['-webkit-transform'] = "scale(0.5)";
+
+  } else if (size_status && mouseX >= 175) {
+    console.log('get larger!');
+    $(element).data('size', false);
+    
+    $.post('/magnets/' + id, {size_status: false});
+
+    element.style['-webkit-transform'] = "scale(1)";
+
+  };
+}
+
+</script>
+
+
+
+
+
+
+
+
+
+
