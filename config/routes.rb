@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   get '/remove/:id' => 'magnets#destroy'
 
+  get '/uploaded_image/:id' => 'uploaded_images#show'
+
   # <form action="/magnets/5" method="POST">
  # not necessarily user submitted (i.e. Javascript) -- browser url doesn't change!
 

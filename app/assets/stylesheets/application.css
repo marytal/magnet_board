@@ -14,11 +14,24 @@
  *= require_self
  */
 
+
+.arrow {
+  position: absolute;
+  top: 200px;
+  max-width: 50px;
+  max-height: 60px;
+}
+
+.border {
+  border: solid;
+}
+
 .magnet {
   position: absolute;
   z-index: -1;
   max-width: 400px;
   max-height: 400px;
+  -webkit-transform: scale(1);
 }
 
 body {
@@ -37,7 +50,7 @@ body.transform {
 
 .shrunk {
 
-  -webkit-transform: scale(0.5);
+  -webkit-transform: scale(0.3);
 
 }
 
@@ -45,5 +58,5 @@ body.transform {
     border-left: thick solid black;
     position: absolute;
     left: 175px;
-    top: 80px;
+    top: 120px;
 }

@@ -8,7 +8,17 @@ class MagnetsController < ApplicationController
   end
 
   def create
-    Magnet.create({url: params[:url], x: 0, y: 0, size_status: true})
+    if params[:some_file]
+      uploaded_image = UploadedImage.new
+      uploaded_image.image = params[:some_file].read
+      uploaded_image.mime_type = params[:some_file].content_type
+      uploaded_image.save
+
+      params[:url] = "/uploaded_image/#{uploaded_image.id}"
+    end
+
+
+    Magnet.create({url: params[:url], x: 0, y: 0, size_status: true}) unless !params[:url]
     redirect_to '/'
   end
 
