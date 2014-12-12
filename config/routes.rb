@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
   get '/' => 'magnets#index'
+  # get '/magnets' => 'magnets#index_json'
+
   post '/' => 'magnets#create'
 
   post '/magnets/:id' => 'magnets#update' # params = {id: 1, x: 51, y: 105}

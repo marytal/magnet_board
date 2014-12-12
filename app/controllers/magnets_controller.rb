@@ -1,9 +1,12 @@
 class MagnetsController < ApplicationController
+
+  respond_to :json, :html
+
   def index
     @magnets = Magnet.all
-    render 'index'
+    respond_with @magnets
   end
-
+  
   def new
   end
 
@@ -18,8 +21,12 @@ class MagnetsController < ApplicationController
     end
 
 
-    Magnet.create({url: params[:url], x: 0, y: 0, size_status: true}) unless !params[:url]
-    redirect_to '/'
+    if params[:url]
+      @magnet = Magnet.create({url: params[:url], x: 0, y: 0, size_status: true}) 
+      redirect_to "/"
+    end
+
+    
   end
 
   def update

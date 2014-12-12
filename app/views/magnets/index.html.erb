@@ -1,91 +1,38 @@
 
 <!-- <h1>Magnet Board</h1> -->
-<div id="clickme">Click me!</div>
 <form action="/" method="POST" enctype="multipart/form-data">
-<fieldset>
-<legend>Add a picture to the magnet board!</legend>
+  <fieldset>
+    <legend>Add a picture to the magnet board!</legend>
 
-  URL:
-  <input type="text" name="url"><br>
-  <input type="file" name="some_file"><br />
-  <input type="submit"><br>
+    URL:
+    <input type="text" name="url"><br>
+    <input type="file" name="some_file"><br />
+    <input type="submit"><br>
 
-</fieldset>
+  </fieldset>
 </form>
 
+<img id="arrow_up" class="arrow" src="http://upload.wikimedia.org/wikipedia/commons/c/c5/Red_Arrow_Up.png">
+<img id="arrow_down" class="arrow" style="top: 140px" src="http://sambrief.files.wordpress.com/2011/12/600px-red_arrow_up-svg.png">
 
-<img class="arrow"src="http://upload.wikimedia.org/wikipedia/commons/c/c5/Red_Arrow_Up.png">
-<img class="arrow" style="top: 140px" src="http://sambrief.files.wordpress.com/2011/12/600px-red_arrow_up-svg.png">
 
-
-<br>
-
-<% @magnets.each do |magnet|%>
-  <%if magnet.size_status == true%>
-
-    <img data-magnet-id="<%= magnet.id%>" class="shrunk magnet" data-size="<%=magnet.size_status%>" src="<%= magnet.url %>" style="left: <%= magnet.x %>px; top: <%= magnet.y %>px">
-
-  <%else%> 
-
-    <img data-magnet-id="<%= magnet.id%>" data-size="<%=magnet.size_status%>" class="magnet" src="<%= magnet.url %>" style="left: <%= magnet.x %>px; top: <%= magnet.y %>px">
-  <%end%>
-
-<%end%>
+<div id="magnets"></div>
 
 <hr class="verticalLine" width="1" size="500">
 
 <script>
 
 
-  var magnets = $(".magnet");
-  var length = magnets.length;
-  console.log('running js')
-
-  magnets.each(function(i,element) {
-
-    var id = $(element).data('magnet-id');
-
-      element.addEventListener('contextmenu', function(event) {
-        console.log(event);
-        event.preventDefault();
-        console.log(event);
-        $.get('/remove/' + id);
-        element.src ="http://www.foiledagainchocolate.com/sites/all/themes/foiledagain/images/poof.png";
+  $.get('/', function(magnets) {
 
 
-        setTimeout(function() {
-          element.remove();
-      }, 1000)
-
-    }, false);
-
-    var arrow = $(".arrow");
-    var arrow_down = arrow[1];
-    var arrow_up = arrow[0];
-
-    arrow_up.addEventListener('mousedown', function(event) {
-      UpOrDown(element, arrow_up, event, "arrow_up", id);
-
-    });
-
-    arrow_down.addEventListener('mousedown', function(event) {
-      UpOrDown(element, arrow_down, event, "arrow_down", id);
-    })
-
-
-
-
-    whenElementDropped(element, function(x,y, mouseX, mouseY) {
-      console.log("x, y", x,y, mouseX, mouseY);
-
-      $.post('/magnets/' + id, {x: x, y: y});
-      SideBar(element, x, id, mouseX);
-
-    });
-
+    console.log(magnets);
+    var length = magnets.length;
+    for(var i = 0; i < length; i++){
+      renderMagnet(magnets[i]);
+    }
 
   });
-
 
 </script>
 
